@@ -1,18 +1,22 @@
 'use client';
 
 import React from 'react';
-import { X, CheckCircle, FileText } from 'lucide-react';
+import { X, CheckCircle, FileText, Layers, ListChecks } from 'lucide-react';
 
 interface PreviewSiswaModalProps {
   isOpen: boolean;
   onClose: () => void;
-  cpData?: any;
+  cp?: any;
+  tpList?: any[];
+  atpList?: any[];
 }
 
 export default function PreviewSiswaModal({
   isOpen,
   onClose,
-  cpData,
+  cp,
+  tpList = [],
+  atpList = [],
 }: PreviewSiswaModalProps) {
   if (!isOpen) return null;
 
@@ -30,7 +34,7 @@ export default function PreviewSiswaModal({
                 Preview Perangkat Ajar (Siswa)
               </h3>
               <p className="text-sm text-gray-500">
-                Tampilan dokumen Capaian Pembelajaran untuk Siswa
+                Tampilan dokumen Capaian Pembelajaran, TP, dan ATP untuk Siswa
               </p>
             </div>
           </div>
@@ -43,22 +47,58 @@ export default function PreviewSiswaModal({
         </div>
 
         {/* Content */}
-        <div className="space-y-4 text-sm text-gray-700">
+        <div className="space-y-6 text-sm text-gray-700">
+          {/* Header Info */}
           <div className="p-4 bg-gray-50 rounded-2xl space-y-2 border border-gray-100">
-            <p><strong>Mata Pelajaran:</strong> {cpData?.nama_matpel || 'Akuntansi Keuangan'}</p>
-            <p><strong>Fase/Kategori:</strong> {cpData?.fase || 'Fase F'} - SMK AKL</p>
-            <p><strong>Status Modul:</strong> {cpData?.status || 'Draft'}</p>
+            <p><strong>Mata Pelajaran:</strong> {cp?.nama_matpel || cp?.matpel || 'Akuntansi Keuangan'}</p>
+            <p><strong>Fase/Kategori:</strong> {cp?.fase || 'Fase F'} - SMK AKL</p>
+            <p><strong>Status Modul:</strong> {cp?.status || 'Draft'}</p>
           </div>
 
+          {/* CP Section */}
           <div className="p-4 border rounded-2xl space-y-2">
             <h4 className="font-semibold text-gray-900 flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-emerald-500" />
-              Capaian Pembelajaran
+              Capaian Pembelajaran (CP)
             </h4>
             <p className="text-gray-600 leading-relaxed">
-              {cpData?.deskripsi || 'Belum ada deskripsi Capaian Pembelajaran yang diunggah.'}
+              {cp?.deskripsi || cp?.elemen || 'Belum ada deskripsi Capaian Pembelajaran.'}
             </p>
           </div>
+
+          {/* TP Section */}
+          {tpList.length > 0 && (
+            <div className="p-4 border rounded-2xl space-y-3">
+              <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                <Layers className="w-4 h-4 text-blue-500" />
+                Tujuan Pembelajaran (TP)
+              </h4>
+              <ul className="list-disc list-inside space-y-1 text-gray-600">
+                {tpList.map((tp: any, index: number) => (
+                  <li key={index}>
+                    {tp.kode_tp ? `[${tp.kode_tp}] ` : ''}{tp.deskripsi || tp.tp_text || JSON.stringify(tp)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* ATP Section */}
+          {atpList.length > 0 && (
+            <div className="p-4 border rounded-2xl space-y-3">
+              <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                <ListChecks className="w-4 h-4 text-purple-500" />
+                Alur Tujuan Pembelajaran (ATP)
+              </h4>
+              <ul className="list-decimal list-inside space-y-1 text-gray-600">
+                {atpList.map((atp: any, index: number) => (
+                  <li key={index}>
+                    {atp.materi || atp.atp_text || JSON.stringify(atp)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
