@@ -86,7 +86,7 @@ export default function PerangkatPage() {
               Status: {cp.status} (v{cp.versi})
             </span>
           </div>
-          <p class="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-500 mt-1">
             Manajemen Capaian Pembelajaran, TP, ATP, dan Berkas Dokumen Kurikulum Merdeka.
           </p>
         </div>
